@@ -6,7 +6,7 @@ Computing, Inference and Modelling, MIVA Open University).
 **Author:** Ademola Utibe Afolabi
 **Email:** a.afolabi3364@miva.edu.ng
 **Department:** Computer Science
-**Matric No:** 2025/A/CSC/0096
+**Matric No:** 2025/A/CSC
 
 ## What is in this repository
 
@@ -40,6 +40,4 @@ Results print in the console; figures and tables are saved in `figures/` and `ta
 The script uses `palmerpenguins::penguins` explicitly, because recent R versions
 include a different built-in dataset also called `penguins`.
 
-## Data
 
-[`palmerpenguins`](https://allisonhorst.github.io/palmerpenguins/) R package
