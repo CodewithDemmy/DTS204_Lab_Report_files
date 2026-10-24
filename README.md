@@ -3,11 +3,6 @@
 Statistical analysis of the Palmer Penguins dataset in R (DTS 204: Statistical
 Computing, Inference and Modelling, MIVA Open University).
 
-**Author:** Ademola Utibe Afolabi
-**Email:** a.afolabi3364@miva.edu.ng
-**Department:** Computer Science
-**Matric No:** 2025/A/CSC
-
 ## What is in this repository
 
 | File / folder | Description |
