@@ -1,0 +1,4 @@
+"test","statistic","p_value"
+"Welch t-test",-23.3860276699655,7.70982314514712e-65
+"Student t-test",-23.6136194720755,8.03092861540735e-68
+"Wilcoxon rank-sum",400.5,2.98231906732245e-42

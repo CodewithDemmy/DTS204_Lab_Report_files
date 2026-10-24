@@ -1,0 +1,410 @@
+
+======================================================================
+TASK 1: DATA EXPLORATION AND PREPROCESSING
+======================================================================
+
+Dimensions (rows, columns): 344 8 
+
+Structure of the data:
+tibble [344 × 8] (S3: tbl_df/tbl/data.frame)
+ $ species          : Factor w/ 3 levels "Adelie","Chinstrap",..: 1 1 1 1 1 1 1 1 1 1 ...
+ $ island           : Factor w/ 3 levels "Biscoe","Dream",..: 3 3 3 3 3 3 3 3 3 3 ...
+ $ bill_length_mm   : num [1:344] 39.1 39.5 40.3 NA 36.7 39.3 38.9 39.2 34.1 42 ...
+ $ bill_depth_mm    : num [1:344] 18.7 17.4 18 NA 19.3 20.6 17.8 19.6 18.1 20.2 ...
+ $ flipper_length_mm: int [1:344] 181 186 195 NA 193 190 181 195 193 190 ...
+ $ body_mass_g      : int [1:344] 3750 3800 3250 NA 3450 3650 3625 4675 3475 4250 ...
+ $ sex              : Factor w/ 2 levels "female","male": 2 1 1 NA 1 2 1 2 NA NA ...
+ $ year             : int [1:344] 2007 2007 2007 2007 2007 2007 2007 2007 2007 2007 ...
+
+First six rows:
+# A tibble: 6 × 8
+  species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+  <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
+1 Adelie  Torgersen           39.1          18.7               181        3750
+2 Adelie  Torgersen           39.5          17.4               186        3800
+3 Adelie  Torgersen           40.3          18                 195        3250
+4 Adelie  Torgersen           NA            NA                  NA          NA
+5 Adelie  Torgersen           36.7          19.3               193        3450
+6 Adelie  Torgersen           39.3          20.6               190        3650
+# ℹ 2 more variables: sex <fct>, year <int>
+
+Missing values per variable:
+                           variable n_missing pct_missing
+species                     species         0        0.00
+island                       island         0        0.00
+bill_length_mm       bill_length_mm         2        0.58
+bill_depth_mm         bill_depth_mm         2        0.58
+flipper_length_mm flipper_length_mm         2        0.58
+body_mass_g             body_mass_g         2        0.58
+sex                             sex        11        3.20
+year                           year         0        0.00
+
+Number of rows with at least one missing value: 11 of 344 
+Number of fully complete rows: 333 
+
+Rows with missing values:
+# A tibble: 11 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   <fct>   <fct>              <dbl>         <dbl>             <int>       <int>
+ 1 Adelie  Torgersen           NA            NA                  NA          NA
+ 2 Adelie  Torgersen           34.1          18.1               193        3475
+ 3 Adelie  Torgersen           42            20.2               190        4250
+ 4 Adelie  Torgersen           37.8          17.1               186        3300
+ 5 Adelie  Torgersen           37.8          17.3               180        3700
+ 6 Adelie  Dream               37.5          18.9               179        2975
+ 7 Gentoo  Biscoe              44.5          14.3               216        4100
+ 8 Gentoo  Biscoe              46.2          14.4               214        4650
+ 9 Gentoo  Biscoe              47.3          13.8               216        4725
+10 Gentoo  Biscoe              44.5          15.7               217        4875
+11 Gentoo  Biscoe              NA            NA                  NA          NA
+# ℹ 2 more variables: sex <fct>, year <int>
+
+Summary statistics (mean, median, range, standard deviation):
+           variable   n    mean  median    min    max  range     sd
+1    bill_length_mm 342   43.92   44.45   32.1   59.6   27.5   5.46
+2     bill_depth_mm 342   17.15   17.30   13.1   21.5    8.4   1.97
+3 flipper_length_mm 342  200.92  197.00  172.0  231.0   59.0  14.06
+4       body_mass_g 342 4201.75 4050.00 2700.0 6300.0 3600.0 801.95
+
+Body mass (g) by species:
+    species   n   mean median    sd  min  max
+1    Adelie 151 3700.7   3700 458.6 2850 4775
+2 Chinstrap  68 3733.1   3700 384.3 2700 4800
+3    Gentoo 123 5076.0   5000 504.1 3950 6300
+
+======================================================================
+TASK 2: HYPOTHESIS TESTING
+======================================================================
+
+--- 2.i Two-sample t-test: body mass, Adelie vs Gentoo ---
+
+Sample sizes  : Adelie = 151  Gentoo = 123
+Sample means  : Adelie = 3700.7  Gentoo = 5076
+Sample SDs    : Adelie = 458.6  Gentoo = 504.1 
+
+Assumption check 1 - normality within each group (Shapiro-Wilk):
+
+	Shapiro-Wilk normality test
+
+data:  adelie
+W = 0.98071, p-value = 0.0324
+
+
+	Shapiro-Wilk normality test
+
+data:  gentoo
+W = 0.98593, p-value = 0.2336
+
+
+Assumption check 2 - equal variances (F test):
+
+	F test to compare two variances
+
+data:  adelie and gentoo
+F = 0.82745, num df = 150, denom df = 122, p-value = 0.2691
+alternative hypothesis: true ratio of variances is not equal to 1
+95 percent confidence interval:
+ 0.5875588 1.1583164
+sample estimates:
+ratio of variances 
+         0.8274515 
+
+
+MAIN TEST - Welch two-sample t-test:
+
+	Welch Two Sample t-test
+
+data:  adelie and gentoo
+t = -23.386, df = 249.64, p-value < 2.2e-16
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -1491.183 -1259.525
+sample estimates:
+mean of x mean of y 
+ 3700.662  5076.016 
+
+
+Mean difference (Adelie - Gentoo): -1375.35 g
+95% CI for the difference        : -1491.18 to -1259.53 g
+Cohen's d (effect size)          : -2.87 
+p-value                          : 7.71e-65 
+Decision at alpha = 0.05 : REJECT H0 - mean body mass differs significantly. 
+
+Robustness check A - Student t-test (equal variances assumed):
+
+	Two Sample t-test
+
+data:  adelie and gentoo
+t = -23.614, df = 272, p-value < 2.2e-16
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -1490.021 -1260.687
+sample estimates:
+mean of x mean of y 
+ 3700.662  5076.016 
+
+
+Robustness check B - Wilcoxon rank-sum test (no normality assumption):
+
+	Wilcoxon rank sum test with continuity correction
+
+data:  adelie and gentoo
+W = 400.5, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+
+
+--- 2.ii One-sample proportion test: proportion of males ---
+
+Penguins with recorded sex: 333 (males = 168 , females = 165 )
+Sample proportion of males: 0.5045 
+Expected males under H0   : 166.5 
+
+MAIN TEST - one-sample proportion test (prop.test):
+
+	1-sample proportions test with continuity correction
+
+data:  n_male out of n_known, null probability 0.5
+X-squared = 0.012012, df = 1, p-value = 0.9127
+alternative hypothesis: true p is not equal to 0.5
+95 percent confidence interval:
+ 0.4495741 0.5593293
+sample estimates:
+        p 
+0.5045045 
+
+
+Robustness check - exact binomial test:
+
+	Exact binomial test
+
+data:  n_male and n_known
+number of successes = 168, number of trials = 333, p-value = 0.9127
+alternative hypothesis: true probability of success is not equal to 0.5
+95 percent confidence interval:
+ 0.4494698 0.5594584
+sample estimates:
+probability of success 
+             0.5045045 
+
+
+p-value (prop.test): 0.9127 
+Decision at alpha = 0.05 : FAIL TO REJECT H0 - no evidence the proportion differs from 50%. 
+
+======================================================================
+TASK 3: CORRELATION ANALYSIS
+======================================================================
+
+Pearson correlation matrix (n = 342 complete measurements):
+                  bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+bill_length_mm             1.000        -0.235             0.656       0.595
+bill_depth_mm             -0.235         1.000            -0.584      -0.472
+flipper_length_mm          0.656        -0.584             1.000       0.871
+body_mass_g                0.595        -0.472             0.871       1.000
+
+Correlation tests for each pair:
+        variable_1        variable_2      r ci_low ci_high   p_value
+    bill_length_mm     bill_depth_mm -0.235 -0.333  -0.132  1.12e-05
+    bill_length_mm flipper_length_mm  0.656  0.591   0.713  1.74e-43
+    bill_length_mm       body_mass_g  0.595  0.522   0.660  3.81e-34
+     bill_depth_mm flipper_length_mm -0.584 -0.650  -0.509  1.23e-32
+     bill_depth_mm       body_mass_g -0.472 -0.550  -0.385  2.28e-20
+ flipper_length_mm       body_mass_g  0.871  0.843   0.895 4.37e-107
+      strength
+          weak
+ fairly strong
+ fairly strong
+ fairly strong
+      moderate
+          high
+
+Correlations computed separately within each species:
+    species   n r_billlen_billdepth r_flipper_bodymass
+1    Adelie 151               0.391              0.468
+2 Chinstrap  68               0.654              0.642
+3    Gentoo 123               0.643              0.703
+
+Pairs with |r| >= 0.70 (highly correlated):
+        variable_1  variable_2         r
+ flipper_length_mm body_mass_g 0.8712018
+
+======================================================================
+TASK 4: REGRESSION MODELLING
+======================================================================
+
+--- 4.i Simple linear regression ---
+
+Call:
+lm(formula = body_mass_g ~ flipper_length_mm, data = penguins)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1058.80  -259.27   -26.88   247.33  1288.69 
+
+Coefficients:
+                   Estimate Std. Error t value Pr(>|t|)    
+(Intercept)       -5780.831    305.815  -18.90   <2e-16 ***
+flipper_length_mm    49.686      1.518   32.72   <2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 394.3 on 340 degrees of freedom
+  (2 observations deleted due to missingness)
+Multiple R-squared:  0.759,	Adjusted R-squared:  0.7583 
+F-statistic:  1071 on 1 and 340 DF,  p-value: < 2.2e-16
+
+
+Regression equation:
+  body_mass_g = -5780.83 + 49.69 * flipper_length_mm
+
+95% confidence intervals for the coefficients:
+                      2.5 %    97.5 %
+(Intercept)       -6382.358 -5179.305
+flipper_length_mm    46.699    52.672
+
+R-squared = 0.7590, adjusted R-squared = 0.7583
+Residual standard error = 394.3 g on 340 degrees of freedom
+
+--- 4.ii Multiple linear regression ---
+
+Call:
+lm(formula = body_mass_g ~ flipper_length_mm + bill_length_mm + 
+    bill_depth_mm, data = penguins)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1054.94  -290.33   -21.91   239.04  1276.64 
+
+Coefficients:
+                   Estimate Std. Error t value Pr(>|t|)    
+(Intercept)       -6424.765    561.469 -11.443   <2e-16 ***
+flipper_length_mm    50.269      2.477  20.293   <2e-16 ***
+bill_length_mm        4.162      5.329   0.781    0.435    
+bill_depth_mm        20.050     13.694   1.464    0.144    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 393.4 on 338 degrees of freedom
+  (2 observations deleted due to missingness)
+Multiple R-squared:  0.7615,	Adjusted R-squared:  0.7594 
+F-statistic: 359.7 on 3 and 338 DF,  p-value: < 2.2e-16
+
+
+95% confidence intervals for the coefficients:
+                      2.5 %    97.5 %
+(Intercept)       -7529.179 -5320.351
+flipper_length_mm    45.397    55.142
+bill_length_mm       -6.321    14.644
+bill_depth_mm        -6.887    46.986
+
+Variance inflation factors (values above 5 would be a concern):
+flipper_length_mm    bill_length_mm     bill_depth_mm 
+             2.67              1.87              1.61 
+
+F-test comparing the simple model with the multiple model:
+Analysis of Variance Table
+
+Model 1: body_mass_g ~ flipper_length_mm
+Model 2: body_mass_g ~ flipper_length_mm + bill_length_mm + bill_depth_mm
+  Res.Df      RSS Df Sum of Sq      F Pr(>F)
+1    340 52854796                           
+2    338 52311359  2    543437 1.7557 0.1744
+
+Model comparison:
+                                         model predictors r_squared
+                       Simple (flipper length)          1    0.7590
+ Multiple (flipper + bill length + bill depth)          3    0.7615
+ adj_r_squared rse_grams    AIC    BIC
+        0.7583     394.3 5062.9 5074.4
+        0.7594     393.4 5063.3 5082.5
+
+1. Shapiro-Wilk test on the residuals of the multiple regression:
+
+	Shapiro-Wilk normality test
+
+data:  residuals(model2)
+W = 0.99368, p-value = 0.164
+
+
+2. Breusch-Pagan test: statistic = 3.572, p-value = 0.3115
+
+3. Largest Cook's distance = 0.029 (concern if > 0.5)
+   Penguins with |standardised residual| > 3: 1 
+
+4. RESET test for non-linearity: p-value = 2.29e-06
+
+Extra model: body_mass_g ~ flipper_length_mm + species
+
+Call:
+lm(formula = body_mass_g ~ flipper_length_mm + species, data = penguins)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-927.70 -254.82  -23.92  241.16 1191.68 
+
+Coefficients:
+                   Estimate Std. Error t value Pr(>|t|)    
+(Intercept)       -4031.477    584.151  -6.901 2.55e-11 ***
+flipper_length_mm    40.705      3.071  13.255  < 2e-16 ***
+speciesChinstrap   -206.510     57.731  -3.577 0.000398 ***
+speciesGentoo       266.810     95.264   2.801 0.005392 ** 
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 375.5 on 338 degrees of freedom
+  (2 observations deleted due to missingness)
+Multiple R-squared:  0.7826,	Adjusted R-squared:  0.7807 
+F-statistic: 405.7 on 3 and 338 DF,  p-value: < 2.2e-16
+
+
+======================================================================
+TASK 5: VISUALIZATION
+======================================================================
+
+Skewness check for body mass (positive = longer right tail): 0.466 
+Shapiro-Wilk test on body mass:
+
+	Shapiro-Wilk normality test
+
+data:  bm
+W = 0.95921, p-value = 3.679e-08
+
+
+======================================================================
+SESSION INFORMATION
+======================================================================
+R version 4.6.1 (2026-06-24 ucrt)
+Platform: x86_64-w64-mingw32/x64
+Running under: Windows 10 x64 (build 19045)
+
+Matrix products: default
+  LAPACK version 3.12.1
+
+locale:
+[1] LC_COLLATE=English_United States.utf8 
+[2] LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+time zone: Africa/Lagos
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] dplyr_1.2.1          ggplot2_4.0.3        palmerpenguins_0.1.1
+
+loaded via a namespace (and not attached):
+ [1] vctrs_0.7.3        nlme_3.1-169       cli_3.6.6          knitr_1.52        
+ [5] rlang_1.3.0        xfun_0.62          generics_0.1.4     S7_0.2.2          
+ [9] labeling_0.4.3     glue_1.8.1         htmltools_0.5.9    tinytex_0.61      
+[13] stats4_4.6.1       scales_1.4.0       rmarkdown_2.32     grid_4.6.1        
+[17] evaluate_1.0.5     tibble_3.3.1       fastmap_1.2.0      lifecycle_1.0.5   
+[21] compiler_4.6.1     RColorBrewer_1.1-3 pkgconfig_2.0.3    mgcv_1.9-4        
+[25] lattice_0.22-9     farver_2.1.2       digest_0.6.39      R6_2.6.1          
+[29] utf8_1.2.6         tidyselect_1.2.1   splines_4.6.1      pillar_1.11.1     
+[33] magrittr_2.0.5     Matrix_1.7-5       withr_3.0.3        tools_4.6.1       
+[37] gtable_0.3.6      
+
+Done. Figures are in 'figures/' and tables are in 'tables/'.
